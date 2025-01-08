@@ -30,7 +30,6 @@ namespace DbArchiver.Provider.MSSQL
             {
                 try
                 {
-                    // Convert dynamic data to dictionaries
                     var dataDictionaries = data.Select(item =>
                         ((IDictionary<string, object>)item).ToDictionary(k => k.Key, v => v.Value));
 
@@ -66,7 +65,6 @@ namespace DbArchiver.Provider.MSSQL
             {
                 try
                 {
-                    // Convert dynamic data to dictionaries
                     var dataDictionaries = data.Select(item =>
                         ((IDictionary<string, object>)item).ToDictionary(k => k.Key, v => v.Value));
                     
@@ -77,9 +75,11 @@ namespace DbArchiver.Provider.MSSQL
                         var columns = string.Join(", ", record.Keys);
                         var parameters = string.Join(", ", record.Keys.Select(k => $"@{k}"));
 
-                        var query = $"INSERT INTO {targetSettings.Schema}.{targetSettings.Table} ({columns}) VALUES ({parameters})";
+                        StringBuilder queryStrBuilder = new StringBuilder();
+                        queryStrBuilder.Append($"IF NOT EXISTS (SELECT {targetSettings.IdColumn} FROM {targetSettings.Schema}.{targetSettings.Table} WHERE {targetSettings.IdColumn} = @{targetSettings.IdColumn}) ");
+                        queryStrBuilder.Append($"INSERT INTO {targetSettings.Schema}.{targetSettings.Table} ({columns}) VALUES ({parameters})");
 
-                        await connection.ExecuteAsync(query, record);
+                        await connection.ExecuteAsync(queryStrBuilder.ToString(), record);
                     }
                 }
                 catch (Exception ex)
