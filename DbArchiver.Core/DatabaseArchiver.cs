@@ -44,7 +44,9 @@ namespace DbArchiver.Core
                 {
                     // should be transactional!
                     await _providerTarget.InsertAsync(_configuration.Target.Settings, iterator.Data);
-                    await _providerSource.DeleteAsync(_configuration.Source.Settings, iterator.Data);
+
+                    if (_configuration.Source.DeleteAfterArchived)
+                        await _providerSource.DeleteAsync(_configuration.Source.Settings, iterator.Data);
 
                     _logger.LogDebug($"{nameof(DatabaseArchiver.ArchiveAsync)} archived {_configuration.Source.TransferQuantity} data!");
                 }           

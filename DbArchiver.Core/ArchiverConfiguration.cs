@@ -14,6 +14,7 @@ namespace DbArchiver.Core
         public string Provider { get; set; }
         public string Host { get; set; }
         public int TransferQuantity { get; set; }
+        public bool DeleteAfterArchived { get; set; }
         public ISourceSettings Settings { get; set; }
     }
 
