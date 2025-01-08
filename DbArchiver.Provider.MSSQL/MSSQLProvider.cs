@@ -21,10 +21,10 @@ namespace DbArchiver.Provider.MSSQL
 
         public async Task DeleteAsync(ISourceSettings settings, IEnumerable<object> data)
         {
-            var sourceSettings = ResolveSourceSettings(settings);
-
             if (data == null || !data.Any())
                 return;
+
+            var sourceSettings = ResolveSourceSettings(settings);
 
             using (var connection = new SqlConnection(sourceSettings.ConnectionString))
             {
@@ -55,10 +55,10 @@ namespace DbArchiver.Provider.MSSQL
 
         public async Task InsertAsync(ITargetSettings settings, IEnumerable<object> data)
         {
-            var targetSettings = ResolveTargetSettings(settings);
-
             if (data == null || !data.Any())
                 return;
+
+            var targetSettings = ResolveTargetSettings(settings);
 
             using (var connection = new SqlConnection(targetSettings.ConnectionString))
             {
@@ -91,6 +91,9 @@ namespace DbArchiver.Provider.MSSQL
 
         public async Task ExecuteScriptAsync(ITargetSettings settings, string script)
         {
+            if (string.IsNullOrEmpty(script))
+                throw new ArgumentNullException(nameof(script));
+
             var sourceSettings = ResolveTargetSettings(settings);
 
             using (var connection = new SqlConnection(sourceSettings.ConnectionString))
