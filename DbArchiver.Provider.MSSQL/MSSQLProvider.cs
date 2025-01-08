@@ -37,9 +37,8 @@ namespace DbArchiver.Provider.MSSQL
 
                     foreach (var record in dataDictionaries)
                     {
-                        // Assuming the primary key column name is "Id"
                         if (!record.ContainsKey(sourceSettings.IdColumn))
-                            throw new InvalidOperationException("Primary key 'Id' not found in record.");
+                            throw new InvalidOperationException($"Primary key '{sourceSettings.IdColumn}' not found in record.");
 
                         var query = $"DELETE FROM {sourceSettings.Schema}.{sourceSettings.Table} WHERE {sourceSettings.IdColumn} = @Id";
 
