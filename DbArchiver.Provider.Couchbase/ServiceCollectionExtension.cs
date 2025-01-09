@@ -4,7 +4,7 @@ namespace DbArchiver.Provider.Couchbase
 {
     public static class ServiceCollectionExtension
     {
-        public static IServiceCollection AddMSSQLProviderServices(this IServiceCollection services) {
+        public static IServiceCollection AddCouchbaseProviderServices(this IServiceCollection services) {
             
             services.AddTransient<CouchbaseProvider>();
 
