@@ -1,5 +1,7 @@
 ﻿using DbArchiver.Core;
 using DbArchiver.Provider.MSSQL;
+using DbArchiver.Provider.SQLite;
+using DbArchiver.Provider.PostgreSQL;
 using Quartz;
 
 namespace DbArchiver.WService
@@ -11,6 +13,8 @@ namespace DbArchiver.WService
             var builder = Host.CreateApplicationBuilder(args);
             
             builder.Services.AddMSSQLProviderServices();
+            builder.Services.AddPostgreSQLProviderServices();
+            builder.Services.AddSQLiteProviderServices();
             builder.Services.AddCoreServices();
             
             var configuration = builder.Configuration;

@@ -4,7 +4,7 @@ namespace DbArchiver.Provider.PostgreSQL
 {
     public static class ServiceCollectionExtension
     {
-        public static IServiceCollection AddMSSQLProviderServices(this IServiceCollection services) {
+        public static IServiceCollection AddPostgreSQLProviderServices(this IServiceCollection services) {
             
             services.AddTransient<PostgreSQLProvider>();
 
