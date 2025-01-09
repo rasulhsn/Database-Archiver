@@ -2,9 +2,9 @@
 using DbArchiver.Provider.Common;
 using System.Data;
 
-namespace DbArchiver.Provider.MSSQL
+namespace DbArchiver.Provider.SQLite
 {
-    public class MSSQLProviderIterator : IDatabaseProviderIterator
+    public class SQLiteProviderIterator : IDatabaseProviderIterator
     {
         private readonly IDbConnection _connection;
         private readonly string _queryStr;
@@ -16,8 +16,8 @@ namespace DbArchiver.Provider.MSSQL
 
         public IEnumerable<object> Data { get; private set; }
 
-        public MSSQLProviderIterator(IDbConnection connection,
-                        string query, string orderByColumn,int batchSize)
+        public SQLiteProviderIterator(IDbConnection connection,
+                                      string query, string orderByColumn, int batchSize)
         {
             _connection = connection;
             _queryStr = query;
@@ -32,9 +32,9 @@ namespace DbArchiver.Provider.MSSQL
             if (_disposed) return false;
 
             var paginatedQuery = $@"
-                    {_queryStr}
-                    ORDER BY {_orderByColumn} 
-                    OFFSET @currentOffset ROWS FETCH NEXT @batchSize ROWS ONLY";
+                {_queryStr}
+                ORDER BY {_orderByColumn}
+                LIMIT @batchSize OFFSET @currentOffset";
 
             var dynamicParams = new DynamicParameters();
             dynamicParams.Add("currentOffset", _currentOffset);
@@ -54,4 +54,5 @@ namespace DbArchiver.Provider.MSSQL
             _disposed = true;
         }
     }
+
 }
