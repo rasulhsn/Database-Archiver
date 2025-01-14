@@ -31,10 +31,9 @@ namespace DbArchiver.Provider.MSSQL
         {
             if (_disposed) return false;
 
-            var paginatedQuery = $@"
-                    {_queryStr}
-                    ORDER BY {_orderByColumn} 
-                    OFFSET @currentOffset ROWS FETCH NEXT @batchSize ROWS ONLY";
+            var paginatedQuery = $@"{_queryStr}
+                                    ORDER BY {_orderByColumn} 
+                                    OFFSET @currentOffset ROWS FETCH NEXT @batchSize ROWS ONLY";
 
             var dynamicParams = new DynamicParameters();
             dynamicParams.Add("currentOffset", _currentOffset);
