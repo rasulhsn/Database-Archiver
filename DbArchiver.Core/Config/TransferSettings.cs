@@ -1,15 +1,14 @@
-﻿using DbArchiver.Provider.Common;
-using DbArchiver.Provider.Common.Config;
+﻿using DbArchiver.Provider.Common.Config;
 
-namespace DbArchiver.Core
+namespace DbArchiver.Core.Config
 {
-    public class ArchiverConfiguration
+    public class TransferSettings
     {
-        public SourceConfiguration Source { get; set; }
-        public TargetConfiguration Target { get; set; }
+        public SourceProviderSettings Source { get; set; }
+        public TargetProviderSettings Target { get; set; }
     }
 
-    public class SourceConfiguration
+    public class SourceProviderSettings
     {
         public string Provider { get; set; }
         public string Host { get; set; }
@@ -18,7 +17,7 @@ namespace DbArchiver.Core
         public ISourceSettings Settings { get; set; }
     }
 
-    public class TargetConfiguration
+    public class TargetProviderSettings
     {
         public string Provider { get; set; }
         public string Host { get; set; }

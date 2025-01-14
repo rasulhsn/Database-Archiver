@@ -1,4 +1,5 @@
-﻿using DbArchiver.Core.Factories;
+﻿using DbArchiver.Core.Common;
+using DbArchiver.Core.Config;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DbArchiver.Core
@@ -10,11 +11,11 @@ namespace DbArchiver.Core
             services.AddSingleton<IArchiverConfigurationFactory, ArchiverConfigurationFactory>();
             services.AddSingleton<IDatabaseArchiverFactory, DatabaseArchiverFactory>();
 
-            services.AddTransient<DatabaseArchiver>(provider =>
-            {
-                var factory = provider.GetService<IDatabaseArchiverFactory>();
-                return factory!.Create();
-            });
+            //services.AddTransient<DatabaseArchiver>(provider =>
+            //{
+            //    var factory = provider.GetService<IDatabaseArchiverFactory>();
+            //    return factory!.Create();
+            //});
 
             return services;
         }

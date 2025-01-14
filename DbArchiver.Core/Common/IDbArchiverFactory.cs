@@ -1,8 +1,10 @@
 ﻿
-namespace DbArchiver.Core.Factories
+using DbArchiver.Core.Config;
+
+namespace DbArchiver.Core.Common
 {
     public interface IDatabaseArchiverFactory
     {
-        DatabaseArchiver Create();
+        DatabaseArchiver Create(TransferSettings TransferSettings);
     }
 }

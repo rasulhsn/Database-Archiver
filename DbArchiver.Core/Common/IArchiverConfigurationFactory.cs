@@ -1,5 +1,6 @@
-﻿
-namespace DbArchiver.Core.Factories
+﻿using DbArchiver.Core.Config;
+
+namespace DbArchiver.Core.Common
 {
     public interface IArchiverConfigurationFactory
     {

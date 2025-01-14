@@ -1,4 +1,5 @@
-﻿using DbArchiver.Core.Helper;
+﻿using DbArchiver.Core.Config;
+using DbArchiver.Core.Helper;
 using DbArchiver.Provider.Common;
 using Microsoft.Extensions.Logging;
 
@@ -8,18 +9,19 @@ namespace DbArchiver.Core
     {
         private readonly IDatabaseProviderSource _providerSource;
         private readonly IDatabaseProviderTarget _providerTarget;
-        private readonly ArchiverConfiguration _configuration;
+        private readonly TransferSettings _transferSettings;
 
         private readonly ILogger<DatabaseArchiver> _logger;
 
-        public DatabaseArchiver(ArchiverConfiguration configuration,
+        public DatabaseArchiver(TransferSettings transferSettings,
                             IDatabaseProviderSource source,
                             IDatabaseProviderTarget target,
                             ILogger<DatabaseArchiver> logger)
         {
+            _transferSettings = transferSettings;
             _providerSource = source;
             _providerTarget = target;
-            _configuration = configuration;
+       
             _logger = logger;
         }
 
@@ -34,21 +36,21 @@ namespace DbArchiver.Core
             try
             {
                 // execute pre-script
-                if (_configuration.Target.HasPreScript)
-                    await _providerTarget.ExecuteScriptAsync(_configuration.Target.Settings,
-                                                                    _configuration.Target.PreScript);
+                if (_transferSettings.Target.HasPreScript)
+                    await _providerTarget.ExecuteScriptAsync(_transferSettings.Target.Settings,
+                                                                    _transferSettings.Target.PreScript);
 
-                iterator = await _providerSource.GetIteratorAsync(_configuration.Source.Settings,
-                                                                    _configuration.Source.TransferQuantity);
+                iterator = await _providerSource.GetIteratorAsync(_transferSettings.Source.Settings,
+                                                                    _transferSettings.Source.TransferQuantity);
                 while ((await iterator.NextAsync()))
                 {
                     // should be transactional!
-                    await _providerTarget.InsertAsync(_configuration.Target.Settings, iterator.Data);
+                    await _providerTarget.InsertAsync(_transferSettings.Target.Settings, iterator.Data);
 
-                    if (_configuration.Source.DeleteAfterArchived)
-                        await _providerSource.DeleteAsync(_configuration.Source.Settings, iterator.Data);
+                    if (_transferSettings.Source.DeleteAfterArchived)
+                        await _providerSource.DeleteAsync(_transferSettings.Source.Settings, iterator.Data);
 
-                    _logger.LogDebug($"{nameof(DatabaseArchiver.ArchiveAsync)} archived {_configuration.Source.TransferQuantity} data!");
+                    _logger.LogDebug($"{nameof(DatabaseArchiver.ArchiveAsync)} archived {_transferSettings.Source.TransferQuantity} data!");
                 }           
             }
             catch (Exception ex)
@@ -66,8 +68,8 @@ namespace DbArchiver.Core
 
         private void PingHosts()
         {
-            IpPinger.Ping(_configuration.Source.Host);
-            IpPinger.Ping(_configuration.Target.Host);
+            IpPinger.Ping(_transferSettings.Source.Host);
+            IpPinger.Ping(_transferSettings.Target.Host);
         }
     }
 }

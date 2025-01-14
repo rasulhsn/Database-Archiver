@@ -1,4 +1,5 @@
-﻿using DbArchiver.Core.Factories;
+﻿using DbArchiver.Core.Common;
+using DbArchiver.Core.Config;
 using DbArchiver.Core.Helper;
 using DbArchiver.Provider.Common;
 using Microsoft.Extensions.Configuration;
@@ -9,8 +10,6 @@ namespace DbArchiver.Core
 {
     public class DatabaseArchiverFactory : IDatabaseArchiverFactory
     {
-        const string PROVIDER_ASSEMBLY_PREFIX = "DbArchiver.Provider.";
-
         private readonly IArchiverConfigurationFactory _configurationFactory;
         private readonly IServiceProvider _serviceProvider;
         private readonly IConfiguration _configuration;
@@ -24,14 +23,12 @@ namespace DbArchiver.Core
             _configuration = configuration;
         }
 
-        public DatabaseArchiver Create()
+        public DatabaseArchiver Create(TransferSettings TransferSettings)
         {
-            ArchiverConfiguration archiverConfiguration = _configurationFactory.Create();
-
-            string sourceAssemblyName = $"{PROVIDER_ASSEMBLY_PREFIX}{archiverConfiguration.Source.Provider}";
+            string sourceAssemblyName = $"{Constants.PROVIDER_ASSEMBLY_PREFIX}{TransferSettings.Source.Provider}";
             Type sourceType = AssemblyTypeResolver.ResolveByInterface<IDatabaseProviderSource>(sourceAssemblyName);
 
-            string targetAssemblyName = $"{PROVIDER_ASSEMBLY_PREFIX}{archiverConfiguration.Target.Provider}";
+            string targetAssemblyName = $"{Constants.PROVIDER_ASSEMBLY_PREFIX}{TransferSettings.Target.Provider}";
             Type targetType = AssemblyTypeResolver.ResolveByInterface<IDatabaseProviderTarget>(targetAssemblyName);
 
             var providerSource  = _serviceProvider.GetService(sourceType) as IDatabaseProviderSource;
@@ -40,11 +37,10 @@ namespace DbArchiver.Core
 
             if (providerSource == null)
                 throw new Exception($"Database Source Provider is invalid!");
-            
             if (providerTarget == null)
                 throw new Exception($"Database Target Provider is invalid!");
 
-            return new DatabaseArchiver(archiverConfiguration,
+            return new DatabaseArchiver(TransferSettings,
                                     providerSource,
                                     providerTarget,
                                     logger!);
