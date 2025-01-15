@@ -16,65 +16,62 @@ namespace DbArchiver.Core.Config
 
         public ArchiverConfiguration Create()
         {
-            var archiverConfiguration = new ArchiverConfiguration();
+            ArchiverConfiguration instance = new ArchiverConfiguration();
 
-            if (archiverConfiguration.Items == null)
+            var section = _configuration.GetSection($"{nameof(ArchiverConfiguration)}");
+
+            var items = new List<ArchiverConfigurationItem>();
+
+            foreach (var child in section.GetChildren())
             {
-                var section = _configuration.GetSection($"{nameof(ArchiverConfiguration)}");
-
-                var items = new List<ArchiverConfigurationItem>();
-
-                foreach (var child in section.GetChildren())
+                var item = new ArchiverConfigurationItem
                 {
-                    var item = new ArchiverConfigurationItem
+                    JobSchedulerSettings = new JobSchedulerSettings
                     {
-                        JobSchedulerSettings = new JobSchedulerSettings
+                        JobName = child.GetSection($"{nameof(ArchiverConfigurationItem.JobSchedulerSettings)}:{nameof(JobSchedulerSettings.JobName)}")
+                            .Value,
+                        Cron = child.GetSection($"{nameof(ArchiverConfigurationItem.JobSchedulerSettings)}:{nameof(JobSchedulerSettings.Cron)}")
+                            .Value
+                    },
+                    TransferSettings = new TransferSettings
+                    {
+                        Source = new SourceProviderSettings
                         {
-                            JobName = child.GetSection($"{nameof(ArchiverConfigurationItem.JobSchedulerSettings)}:{nameof(JobSchedulerSettings.JobName)}")
+                            Provider = child.GetSection($"{nameof(TransferSettings)}:{nameof(TransferSettings.Source)}:{nameof(SourceProviderSettings.Provider)}")
                                 .Value,
-                            Cron = child.GetSection($"{nameof(ArchiverConfigurationItem.JobSchedulerSettings)}:{nameof(JobSchedulerSettings.Cron)}")
-                                .Value
+                            Host = child.GetSection($"{nameof(TransferSettings)}:{nameof(TransferSettings.Source)}:{nameof(SourceProviderSettings.Host)}")
+                                .Value,
+                            TransferQuantity = child.GetSection($"{nameof(TransferSettings)}:{nameof(TransferSettings.Source)}:{nameof(SourceProviderSettings.TransferQuantity)}")
+                                .Get<int>(),
+                            DeleteAfterArchived = child.GetSection($"{nameof(TransferSettings)}:{nameof(TransferSettings.Source)}:{nameof(SourceProviderSettings.DeleteAfterArchived)}")
+                                .Get<bool>(),
                         },
-                        TransferSettings = new TransferSettings
+                        Target = new TargetProviderSettings
                         {
-                            Source = new SourceProviderSettings
-                            {
-                                Provider = child.GetSection($"{nameof(TransferSettings)}:{nameof(TransferSettings.Source)}:{nameof(SourceProviderSettings.Provider)}")
-                                    .Value,
-                                Host = child.GetSection($"{nameof(TransferSettings)}:{nameof(TransferSettings.Source)}:{nameof(SourceProviderSettings.Host)}")
-                                    .Value,
-                                TransferQuantity = child.GetSection($"{nameof(TransferSettings)}:{nameof(TransferSettings.Source)}:{nameof(SourceProviderSettings.TransferQuantity)}")
-                                    .Get<int>(),
-                                DeleteAfterArchived = child.GetSection($"{nameof(TransferSettings)}:{nameof(TransferSettings.Source)}:{nameof(SourceProviderSettings.DeleteAfterArchived)}")
-                                    .Get<bool>(),
-                            },
-                            Target = new TargetProviderSettings
-                            {
-                                Provider = child.GetSection($"{nameof(TransferSettings)}:{nameof(TransferSettings.Target)}:{nameof(TargetProviderSettings.Provider)}")
-                                    .Value,
-                                Host = child.GetSection($"{nameof(TransferSettings)}:{nameof(TransferSettings.Target)}:{nameof(TargetProviderSettings.Host)}")
-                                    .Value,
-                                PreScript = child.GetSection($"{nameof(TransferSettings)}:{nameof(TransferSettings.Target)}:{nameof(TargetProviderSettings.PreScript)}")
-                                    .Value
-                            }
+                            Provider = child.GetSection($"{nameof(TransferSettings)}:{nameof(TransferSettings.Target)}:{nameof(TargetProviderSettings.Provider)}")
+                                .Value,
+                            Host = child.GetSection($"{nameof(TransferSettings)}:{nameof(TransferSettings.Target)}:{nameof(TargetProviderSettings.Host)}")
+                                .Value,
+                            PreScript = child.GetSection($"{nameof(TransferSettings)}:{nameof(TransferSettings.Target)}:{nameof(TargetProviderSettings.PreScript)}")
+                                .Value
                         }
-                    };
+                    }
+                };
 
-                    item.TransferSettings.Source.Settings = BindSourceSettings(item.TransferSettings.Source.Provider,
-                        child.GetSection($"{nameof(TransferSettings)}:Source:Settings")
-                    );
+                item.TransferSettings.Source.Settings = BindSourceSettings(item.TransferSettings.Source.Provider,
+                    child.GetSection($"{nameof(TransferSettings)}:Source:Settings")
+                );
 
-                    item.TransferSettings.Target.Settings = BindTargetSettings(item.TransferSettings.Target.Provider,
-                        child.GetSection($"{nameof(TransferSettings)}:Target:Settings")
-                    );
+                item.TransferSettings.Target.Settings = BindTargetSettings(item.TransferSettings.Target.Provider,
+                    child.GetSection($"{nameof(TransferSettings)}:Target:Settings")
+                );
 
-                    items.Add(item);
-                }
-
-                archiverConfiguration.Items = items;
+                items.Add(item);
             }
 
-            return archiverConfiguration;
+            instance.Items = items;
+
+            return instance;
         }
 
         private ISourceSettings BindSourceSettings(string providerName, IConfigurationSection section)
