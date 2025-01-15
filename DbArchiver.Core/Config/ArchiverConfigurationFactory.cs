@@ -58,11 +58,11 @@ namespace DbArchiver.Core.Config
                     }
                 };
 
-                item.TransferSettings.Source.Settings = BindSourceSettings(item.TransferSettings.Source.Provider,
+                item.TransferSettings.Source.Settings = CreateSettings<ISourceSettings>(item.TransferSettings.Source.Provider,
                     child.GetSection($"{nameof(TransferSettings)}:Source:Settings")
                 );
 
-                item.TransferSettings.Target.Settings = BindTargetSettings(item.TransferSettings.Target.Provider,
+                item.TransferSettings.Target.Settings = CreateSettings<ITargetSettings>(item.TransferSettings.Target.Provider,
                     child.GetSection($"{nameof(TransferSettings)}:Target:Settings")
                 );
 
@@ -74,26 +74,15 @@ namespace DbArchiver.Core.Config
             return instance;
         }
 
-        private ISourceSettings BindSourceSettings(string providerName, IConfigurationSection section)
+        private TInterface CreateSettings<TInterface>(string providerName, IConfigurationSection section) where TInterface : class
         {
             if (string.IsNullOrWhiteSpace(providerName))
             {
                 throw new ArgumentException("Source provider name cannot be null or empty.");
             }
 
-            var sourceType = ResolveType<ISourceSettings>(providerName);
-            return BindSettings<ISourceSettings>(sourceType, section);
-        }
-
-        private ITargetSettings BindTargetSettings(string providerName, IConfigurationSection section)
-        {
-            if (string.IsNullOrWhiteSpace(providerName))
-            {
-                throw new ArgumentException("Target provider name cannot be null or empty.");
-            }
-
-            var targetType = ResolveType<ITargetSettings>(providerName);
-            return BindSettings<ITargetSettings>(targetType, section);
+            var sourceType = ResolveType<TInterface>(providerName);
+            return BindSettings<TInterface>(sourceType, section);
         }
 
         private static Type ResolveType<T>(string providerName)
