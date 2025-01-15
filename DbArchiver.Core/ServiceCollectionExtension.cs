@@ -11,12 +11,6 @@ namespace DbArchiver.Core
             services.AddSingleton<IArchiverConfigurationFactory, ArchiverConfigurationFactory>();
             services.AddSingleton<IDatabaseArchiverFactory, DatabaseArchiverFactory>();
 
-            //services.AddTransient<DatabaseArchiver>(provider =>
-            //{
-            //    var factory = provider.GetService<IDatabaseArchiverFactory>();
-            //    return factory!.Create();
-            //});
-
             return services;
         }
     }

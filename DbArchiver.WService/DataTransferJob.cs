@@ -1,16 +1,17 @@
-﻿using DbArchiver.Core;
+﻿using DbArchiver.Core.Common;
+using DbArchiver.Core.Config;
 using Quartz;
 
 namespace DbArchiver.WService
 {
     public class DataTransferJob : IJob
     {
+        private readonly IDatabaseArchiverFactory _archiverFactory;
         private readonly ILogger<DataTransferJob> _logger;
-        private readonly DatabaseArchiver _dbArchiver;
-
-        public DataTransferJob(DatabaseArchiver dbArchiver, ILogger<DataTransferJob> logger)
-        { 
-            _dbArchiver = dbArchiver;
+        
+        public DataTransferJob(IDatabaseArchiverFactory dbArchiverFactory, ILogger<DataTransferJob> logger)
+        {
+            _archiverFactory = dbArchiverFactory ?? throw new ArgumentNullException(nameof(dbArchiverFactory));
             _logger = logger;
         }
 
@@ -20,7 +21,17 @@ namespace DbArchiver.WService
 
             try
             {
-                await _dbArchiver.ArchiveAsync(CancellationToken.None);
+                var transferSettings = context.MergedJobDataMap.Get("TransferSettings") as TransferSettings;
+
+                if (transferSettings == null)
+                {
+                    _logger.LogError("TransferSettings not provided to job.");
+                    return;
+                }
+
+                var archiver = _archiverFactory.Create(transferSettings);
+                await archiver.ArchiveAsync(CancellationToken.None);
+
                 _logger.LogInformation("DataTransferJob completed successfully at {Time}", DateTimeOffset.Now);
             }
             catch (Exception ex)

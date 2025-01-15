@@ -3,6 +3,8 @@ using DbArchiver.Provider.MSSQL;
 using DbArchiver.Provider.SQLite;
 using DbArchiver.Provider.PostgreSQL;
 using Quartz;
+using DbArchiver.Core.Common;
+using DbArchiver.Core.Config;
 
 namespace DbArchiver.WService
 {
@@ -16,22 +18,35 @@ namespace DbArchiver.WService
             builder.Services.AddPostgreSQLProviderServices();
             builder.Services.AddSQLiteProviderServices();
             builder.Services.AddCoreServices();
-            
-            var configuration = builder.Configuration;
 
             builder.Services.AddQuartz(q =>
             {
                 q.UseMicrosoftDependencyInjectionJobFactory();
 
-                var jobKey = new JobKey(configuration["JobConfiguration:Name"]);
+                // Add jobs and triggers dynamically
+                using var serviceProvider = builder.Services.BuildServiceProvider();
+                var factory = serviceProvider.GetRequiredService<IArchiverConfigurationFactory>();
 
-                q.AddJob<DataTransferJob>(opts => opts.WithIdentity(jobKey));
+                var archiverConfig = factory.Create();
 
-                q.AddTrigger(opts => opts
-                        .ForJob(jobKey)
-                        .WithIdentity("DataTransferTrigger")
-                        .WithCronSchedule(configuration["JobConfiguration:Cron"])
-                    );
+                if (archiverConfig?.Items != null)
+                {
+                    foreach (var item in archiverConfig.Items)
+                    {
+                        var jobKey = new JobKey(item.JobSchedulerSettings.JobName);
+
+                        q.AddJob<DataTransferJob>(opts => opts.WithIdentity(jobKey));
+
+                        q.AddTrigger(opts => opts
+                            .ForJob(jobKey)
+                            .UsingJobData(new JobDataMap
+                            {
+                                { "TransferSettings", item.TransferSettings }
+                            })
+                            .WithIdentity($"{item.JobSchedulerSettings.JobName}_Trigger")
+                            .WithCronSchedule(item.JobSchedulerSettings.Cron));
+                    }
+                }
             });
 
             builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
