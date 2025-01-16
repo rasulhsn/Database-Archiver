@@ -34,7 +34,7 @@ namespace DbArchiver.Core
             Type targetType = AssemblyTypeResolver.ResolveByInterface<IDatabaseProviderTarget>(targetAssemblyName);
 
             var providerSource  = _serviceProvider.GetService(sourceType) as IDatabaseProviderSource;
-            var providerTarget = _serviceProvider.GetService(sourceType) as IDatabaseProviderTarget;          
+            var providerTarget = _serviceProvider.GetService(targetType) as IDatabaseProviderTarget;          
 
             if (providerSource == null)
             {
