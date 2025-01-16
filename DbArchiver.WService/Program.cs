@@ -5,6 +5,7 @@ using DbArchiver.Provider.PostgreSQL;
 using Quartz;
 using DbArchiver.Core.Common;
 using DbArchiver.Core.Config;
+using DbArchiver.Provider.MySQL;
 
 namespace DbArchiver.WService
 {
@@ -17,6 +18,7 @@ namespace DbArchiver.WService
             builder.Services.AddMSSQLProviderServices();
             builder.Services.AddPostgreSQLProviderServices();
             builder.Services.AddSQLiteProviderServices();
+            builder.Services.AddMySQLProviderServices();
             builder.Services.AddCoreServices();
 
             builder.Services.AddQuartz(q =>

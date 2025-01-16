@@ -8,16 +8,9 @@ using System.Text;
 
 namespace DbArchiver.Provider.SQLite
 {
-    public class SQLiteProvider : IDatabaseProviderSource,
-                              IDatabaseProviderTarget
+    public class SQLiteProvider(ILogger<SQLiteProvider> logger) : IDatabaseProviderSource,
+        IDatabaseProviderTarget
     {
-        private readonly ILogger<SQLiteProvider> _logger;
-
-        public SQLiteProvider(ILogger<SQLiteProvider> logger)
-        {
-            _logger = logger;
-        }
-
         public async Task DeleteAsync(ISourceSettings settings, IEnumerable<object> data)
         {
             if (data == null || !data.Any())
@@ -46,7 +39,7 @@ namespace DbArchiver.Provider.SQLite
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Error deleting data.");
+                    logger.LogError(ex, "Error deleting data.");
                     throw;
                 }
             }
@@ -81,7 +74,7 @@ namespace DbArchiver.Provider.SQLite
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Error inserting data.");
+                    logger.LogError(ex, "Error inserting data.");
                     throw;
                 }
             }
@@ -100,11 +93,11 @@ namespace DbArchiver.Provider.SQLite
                 {
                     await connection.OpenAsync();
                     await connection.ExecuteAsync(script);
-                    _logger.LogInformation("Script executed successfully.");
+                    logger.LogInformation("Script executed successfully.");
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Error executing script.");
+                    logger.LogError(ex, "Error executing script.");
                     throw;
                 }
             }

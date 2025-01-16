@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DbArchiver.Provider.Postgre
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbArchiver.Provider.SQLite", "DbArchiver.Provider.SQLite\DbArchiver.Provider.SQLite.csproj", "{8419E32C-6B00-407A-9043-EC430F458BFD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbArchiver.Provider.MySQL", "DbArchiver.Provider.MySQL\DbArchiver.Provider.MySQL.csproj", "{D0ED3C7F-D1F4-4B5D-8664-57C6A41AFE40}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{8419E32C-6B00-407A-9043-EC430F458BFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8419E32C-6B00-407A-9043-EC430F458BFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8419E32C-6B00-407A-9043-EC430F458BFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0ED3C7F-D1F4-4B5D-8664-57C6A41AFE40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0ED3C7F-D1F4-4B5D-8664-57C6A41AFE40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0ED3C7F-D1F4-4B5D-8664-57C6A41AFE40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0ED3C7F-D1F4-4B5D-8664-57C6A41AFE40}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
