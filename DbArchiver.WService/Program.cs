@@ -2,10 +2,9 @@
 using DbArchiver.Provider.MSSQL;
 using DbArchiver.Provider.SQLite;
 using DbArchiver.Provider.PostgreSQL;
+using DbArchiver.Provider.MySQL;
 using Quartz;
 using DbArchiver.Core.Common;
-using DbArchiver.Core.Config;
-using DbArchiver.Provider.MySQL;
 
 namespace DbArchiver.WService
 {
