@@ -4,6 +4,7 @@ using DbArchiver.Provider.SQLite;
 using DbArchiver.Provider.PostgreSQL;
 using Quartz;
 using DbArchiver.Core.Common;
+using DbArchiver.Provider.MongoDB;
 
 namespace DbArchiver.WService
 {
@@ -12,7 +13,8 @@ namespace DbArchiver.WService
         public static void Main(string[] args)
         {
             var builder = Host.CreateApplicationBuilder(args);
-            
+
+            builder.Services.AddMongoDBProviderServices();
             builder.Services.AddMSSQLProviderServices();
             builder.Services.AddPostgreSQLProviderServices();
             builder.Services.AddSQLiteProviderServices();

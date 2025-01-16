@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DbArchiver.WService", "DbAr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DbArchiver.Provider.PostgreSQL", "DbArchiver.Provider.PostgreSQL\DbArchiver.Provider.PostgreSQL.csproj", "{F49AD8DC-E24F-4489-9FC3-B2FE6BFD53D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbArchiver.Provider.SQLite", "DbArchiver.Provider.SQLite\DbArchiver.Provider.SQLite.csproj", "{8419E32C-6B00-407A-9043-EC430F458BFD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DbArchiver.Provider.SQLite", "DbArchiver.Provider.SQLite\DbArchiver.Provider.SQLite.csproj", "{8419E32C-6B00-407A-9043-EC430F458BFD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbArchiver.Provider.MongoDB", "DbArchiver.Provider.MongoDB\DbArchiver.Provider.MongoDB.csproj", "{401C8896-260E-4CEE-BC7D-7CB3549CC816}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{8419E32C-6B00-407A-9043-EC430F458BFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8419E32C-6B00-407A-9043-EC430F458BFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8419E32C-6B00-407A-9043-EC430F458BFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{401C8896-260E-4CEE-BC7D-7CB3549CC816}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{401C8896-260E-4CEE-BC7D-7CB3549CC816}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{401C8896-260E-4CEE-BC7D-7CB3549CC816}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{401C8896-260E-4CEE-BC7D-7CB3549CC816}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
