@@ -4,44 +4,34 @@ using System.Data;
 
 namespace DbArchiver.Provider.SQLite
 {
-    public class SQLiteProviderIterator : IDatabaseProviderIterator
+    public class SQLiteProviderIterator(
+        IDbConnection connection,
+        string query,
+        string orderByColumn,
+        int batchSize)
+        : IDatabaseProviderIterator
     {
-        private readonly IDbConnection _connection;
-        private readonly string _queryStr;
-        private readonly string _orderByColumn;
-        private readonly int _batchSize;
-        private int _currentOffset;
+        private int _currentOffset = 0;
 
-        private bool _disposed;
+        private bool _disposed = false;
 
         public IEnumerable<object> Data { get; private set; }
-
-        public SQLiteProviderIterator(IDbConnection connection,
-                                      string query, string orderByColumn, int batchSize)
-        {
-            _connection = connection;
-            _queryStr = query;
-            _orderByColumn = orderByColumn;
-            _batchSize = batchSize;
-            _currentOffset = 0;
-            _disposed = false;
-        }
 
         public async Task<bool> NextAsync()
         {
             if (_disposed) return false;
 
             var paginatedQuery = $@"
-                {_queryStr}
-                ORDER BY {_orderByColumn}
+                {query}
+                ORDER BY {orderByColumn}
                 LIMIT @batchSize OFFSET @currentOffset";
 
             var dynamicParams = new DynamicParameters();
             dynamicParams.Add("currentOffset", _currentOffset);
-            dynamicParams.Add("batchSize", _batchSize);
+            dynamicParams.Add("batchSize", batchSize);
 
-            Data = (await _connection.QueryAsync(paginatedQuery, dynamicParams)).ToList();
-            _currentOffset += _batchSize;
+            Data = (await connection.QueryAsync(paginatedQuery, dynamicParams)).ToList();
+            _currentOffset += batchSize;
 
             return Data.Any();
         }
@@ -50,7 +40,7 @@ namespace DbArchiver.Provider.SQLite
         {
             if (_disposed) return;
 
-            _connection?.Dispose();
+            connection?.Dispose();
             _disposed = true;
         }
     }
