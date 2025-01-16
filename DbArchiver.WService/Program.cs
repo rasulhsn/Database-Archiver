@@ -4,7 +4,6 @@ using DbArchiver.Provider.SQLite;
 using DbArchiver.Provider.PostgreSQL;
 using Quartz;
 using DbArchiver.Core.Common;
-using DbArchiver.Core.Config;
 
 namespace DbArchiver.WService
 {
