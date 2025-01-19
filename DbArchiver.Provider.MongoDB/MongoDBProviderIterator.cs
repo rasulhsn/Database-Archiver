@@ -34,7 +34,16 @@ namespace DbArchiver.Provider.MongoDB
                                         .Limit(_batchSize)
                                         .ToListAsync();
 
-            Data = data.Select(d => d.ToDictionary());
+            Data = data.Select(d =>
+            {
+                var dictionary = d.ToDictionary();
+                if (dictionary.ContainsKey("_id") && dictionary["_id"] is ObjectId objectId)
+                {
+                    dictionary["_id"] = objectId.ToString();
+                }
+                return dictionary;
+            });
+
             _currentOffset += _batchSize;
 
             return Data.Any();
