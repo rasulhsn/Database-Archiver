@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DbArchiver.Provider.MySQL",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegrationTests", "tests\IntegrationTests\IntegrationTests.csproj", "{7570BAE6-EFFC-4EA7-BDF3-5AC0F983E98B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DbArchiver.Provider.MongoDB", "DbArchiver.Provider.MongoDB\DbArchiver.Provider.MongoDB.csproj", "{3D9F954A-2A65-4BF2-B5CE-26AB3CA3F9DE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{7570BAE6-EFFC-4EA7-BDF3-5AC0F983E98B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7570BAE6-EFFC-4EA7-BDF3-5AC0F983E98B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7570BAE6-EFFC-4EA7-BDF3-5AC0F983E98B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D9F954A-2A65-4BF2-B5CE-26AB3CA3F9DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D9F954A-2A65-4BF2-B5CE-26AB3CA3F9DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D9F954A-2A65-4BF2-B5CE-26AB3CA3F9DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D9F954A-2A65-4BF2-B5CE-26AB3CA3F9DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

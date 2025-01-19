@@ -26,7 +26,6 @@ namespace DbArchiver.WService
             {
                 q.UseMicrosoftDependencyInjectionJobFactory();
 
-                // Add jobs and triggers dynamically
                 using var serviceProvider = builder.Services.BuildServiceProvider();
                 var factory = serviceProvider.GetRequiredService<IArchiverConfigurationFactory>();
 
