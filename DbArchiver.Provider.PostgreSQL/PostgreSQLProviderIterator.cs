@@ -48,6 +48,8 @@ namespace DbArchiver.Provider.PostgreSQL
 
         public void Dispose()
         {
+            if (_disposed) return;
+
             _connection?.Dispose();
             _disposed = true;
         }
