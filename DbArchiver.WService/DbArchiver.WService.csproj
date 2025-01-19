@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DbArchiver.Core\DbArchiver.Core.csproj" />
+    <ProjectReference Include="..\DbArchiver.Provider.MongoDB\DbArchiver.Provider.MongoDB.csproj" />
     <ProjectReference Include="..\DbArchiver.Provider.MSSQL\DbArchiver.Provider.MSSQL.csproj" />
     <ProjectReference Include="..\DbArchiver.Provider.MySQL\DbArchiver.Provider.MySQL.csproj" />
     <ProjectReference Include="..\DbArchiver.Provider.PostgreSQL\DbArchiver.Provider.PostgreSQL.csproj" />
