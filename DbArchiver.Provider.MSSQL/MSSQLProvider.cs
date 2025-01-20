@@ -4,6 +4,8 @@ using DbArchiver.Provider.Common.Config;
 using DbArchiver.Provider.MSSQL.Config;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
+using System.Data;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using static Dapper.SqlMapper;
 
@@ -66,19 +68,40 @@ namespace DbArchiver.Provider.MSSQL
                 {
                     var dataDictionaries = data.Select(item =>
                         ((IDictionary<string, object>)item).ToDictionary(k => k.Key, v => v.Value));
-                    
+
                     await connection.OpenAsync();
 
                     foreach (var record in dataDictionaries)
                     {
-                        var columns = string.Join(", ", record.Keys);
-                        var parameters = string.Join(", ", record.Keys.Select(k => $"@{k}"));
+                        if (!targetSettings.HasColumnsMapping)
+                        {
+                            var columns = string.Join(", ", record.Keys);
+                            var parameters = string.Join(", ", record.Keys.Select(k => $"@{k}"));
 
-                        StringBuilder queryStrBuilder = new StringBuilder();
-                        queryStrBuilder.Append($"IF NOT EXISTS (SELECT {targetSettings.IdColumn} FROM {targetSettings.Schema}.{targetSettings.Table} WHERE {targetSettings.IdColumn} = @{targetSettings.IdColumn}) ");
-                        queryStrBuilder.Append($"INSERT INTO {targetSettings.Schema}.{targetSettings.Table} ({columns}) VALUES ({parameters})");
+                            StringBuilder queryStrBuilder = new StringBuilder();
+                            queryStrBuilder.Append($"IF NOT EXISTS (SELECT {targetSettings.IdColumn} FROM {targetSettings.Schema}.{targetSettings.Table} WHERE {targetSettings.IdColumn} = @{targetSettings.IdColumn}) ");
+                            queryStrBuilder.Append($"INSERT INTO {targetSettings.Schema}.{targetSettings.Table} ({columns}) VALUES ({parameters})");
 
-                        await connection.ExecuteAsync(queryStrBuilder.ToString(), record);
+                            await connection.ExecuteAsync(queryStrBuilder.ToString(), record);
+                        }
+                        else
+                        {
+                            var mappedRecord = record.Where(kv => targetSettings.ColumnsMapping.Keys.Any(key => string.Equals(key, kv.Key, StringComparison.OrdinalIgnoreCase)))
+                                                    .ToDictionary(kv => targetSettings.ColumnsMapping
+                                                    .First(mapping => string.Equals(mapping.Key, kv.Key, StringComparison.OrdinalIgnoreCase)).Value, kv => kv.Value);
+
+                            if (!mappedRecord.Any())
+                                continue; // Skip if no columns are mapped
+
+                            var columns = string.Join(", ", mappedRecord.Keys);
+                            var parameters = string.Join(", ", mappedRecord.Keys.Select(k => $"@{k}"));
+
+                            StringBuilder queryStrBuilder = new StringBuilder();
+                            queryStrBuilder.Append($"IF NOT EXISTS (SELECT {targetSettings.IdColumn} FROM {targetSettings.Schema}.{targetSettings.Table} WHERE {targetSettings.IdColumn} = @{targetSettings.IdColumn}) ");
+                            queryStrBuilder.Append($"INSERT INTO {targetSettings.Schema}.{targetSettings.Table} ({columns}) VALUES ({parameters})");
+
+                            await connection.ExecuteAsync(queryStrBuilder.ToString(), mappedRecord);
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -144,5 +167,6 @@ namespace DbArchiver.Provider.MSSQL
         /// </summary>
         private TargetSettings ResolveTargetSettings(ITargetSettings targetSettings)
             => targetSettings as TargetSettings;
+
     }
 }

@@ -9,7 +9,9 @@ namespace DbArchiver.Provider.MSSQL.Config
         public string Table { get; set; }
         public string IdColumn { get; set; }
         public string Condition { get; set; }
+        public Dictionary<string, string> ColumnsMapping { get; set; }
 
         public bool HasCondition => !string.IsNullOrEmpty(Condition);
+        public bool HasColumnsMapping => ColumnsMapping != null && ColumnsMapping.Any();
     }
 }
