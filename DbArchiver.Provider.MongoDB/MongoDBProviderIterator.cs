@@ -28,25 +28,58 @@ namespace DbArchiver.Provider.MongoDB
             if (_disposed) return false;
 
             var sort = Builders<BsonDocument>.Sort.Ascending(_orderByColumn);
-            var data = await _collection.Find(new BsonDocument())
+            var filteredData = await _collection.Find(new BsonDocument())
                                         .Sort(sort)
                                         .Skip(_currentOffset)
                                         .Limit(_batchSize)
                                         .ToListAsync();
 
-            Data = data.Select(d =>
+            Data = filteredData.Select(d =>
             {
                 var dictionary = d.ToDictionary();
                 if (dictionary.ContainsKey("_id") && dictionary["_id"] is ObjectId objectId)
                 {
                     dictionary["_id"] = objectId.ToString();
                 }
-                return dictionary;
+                return FlattenDictionary(dictionary);
             });
 
             _currentOffset += _batchSize;
 
             return Data.Any();
+        }
+
+        private Dictionary<string, object> FlattenDictionary(Dictionary<string, object> source, string parentKey = "")
+        {
+            var result = new Dictionary<string, object>();
+
+            foreach (var kvp in source)
+            {
+                var key = string.IsNullOrEmpty(parentKey) ? kvp.Key : $"{parentKey}_{kvp.Key}";
+
+                if (kvp.Value is Dictionary<string, object> nestedDictionary)
+                {
+                    var flattenedNested = FlattenDictionary(nestedDictionary, key);
+                    foreach (var nestedKvp in flattenedNested)
+                    {
+                        result[nestedKvp.Key] = nestedKvp.Value;
+                    }
+                }
+                else if (kvp.Value is BsonDocument bsonDocument)
+                {
+                    var nestedFromBson = FlattenDictionary(bsonDocument.ToDictionary(), key);
+                    foreach (var nestedKvp in nestedFromBson)
+                    {
+                        result[nestedKvp.Key] = nestedKvp.Value;
+                    }
+                }
+                else
+                {
+                    result[key] = kvp.Value;
+                }
+            }
+
+            return result;
         }
 
         public void Dispose()
@@ -56,5 +89,4 @@ namespace DbArchiver.Provider.MongoDB
             _disposed = true;
         }
     }
-
 }
