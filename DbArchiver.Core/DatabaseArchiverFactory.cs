@@ -1,4 +1,4 @@
-﻿using DbArchiver.Core.Common;
+﻿using DbArchiver.Core.Contract;
 using DbArchiver.Core.Config;
 using DbArchiver.Core.Helper;
 using DbArchiver.Provider.Common;

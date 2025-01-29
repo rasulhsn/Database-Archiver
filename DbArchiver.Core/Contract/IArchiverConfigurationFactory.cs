@@ -1,6 +1,6 @@
 ﻿using DbArchiver.Core.Config;
 
-namespace DbArchiver.Core.Common
+namespace DbArchiver.Core.Contract
 {
     public interface IArchiverConfigurationFactory
     {

@@ -4,7 +4,7 @@ using DbArchiver.Provider.SQLite;
 using DbArchiver.Provider.PostgreSQL;
 using DbArchiver.Provider.MySQL;
 using Quartz;
-using DbArchiver.Core.Common;
+using DbArchiver.Core.Contract;
 using DbArchiver.Provider.MongoDB;
 
 namespace DbArchiver.WService
