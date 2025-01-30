@@ -4,7 +4,7 @@ using DbArchiver.Provider.PostgreSQL.Config;
 using Microsoft.Extensions.Logging.Abstractions;
 using Npgsql;
 
-namespace DbArchiver.IntegrationTests;
+namespace DbArchiver.Provider.Integration.Tests;
 
 public class PostgreSQLProviderTests
 {

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using MySql.Data.MySqlClient;
 
-namespace DbArchiver.IntegrationTests;
+namespace DbArchiver.Provider.Integration.Tests;
 
 public class MySQLProviderTests
 {

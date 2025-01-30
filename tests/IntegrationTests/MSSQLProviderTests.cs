@@ -5,7 +5,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace DbArchiver.IntegrationTests;
+namespace DbArchiver.Provider.Integration.Tests;
 
 public class MSSQLProviderTests
 {

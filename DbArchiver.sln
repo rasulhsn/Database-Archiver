@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DbArchiver.Provider.SQLite"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DbArchiver.Provider.MySQL", "DbArchiver.Provider.MySQL\DbArchiver.Provider.MySQL.csproj", "{D0ED3C7F-D1F4-4B5D-8664-57C6A41AFE40}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegrationTests", "tests\IntegrationTests\IntegrationTests.csproj", "{7570BAE6-EFFC-4EA7-BDF3-5AC0F983E98B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DbArchiver.Provider.Integration.Tests", "tests\IntegrationTests\DbArchiver.Provider.Integration.Tests.csproj", "{7570BAE6-EFFC-4EA7-BDF3-5AC0F983E98B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DbArchiver.Provider.MongoDB", "DbArchiver.Provider.MongoDB\DbArchiver.Provider.MongoDB.csproj", "{3D9F954A-2A65-4BF2-B5CE-26AB3CA3F9DE}"
 EndProject
@@ -26,6 +26,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{6DBBF278-31BB-4BC8-8817-327A542C360D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "providers", "providers", "{1633089B-BF62-44E5-8B21-1049BE6C8184}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbArchiver.Core.Unit.Tests", "DbArchiver.Core.Unit.Tests\DbArchiver.Core.Unit.Tests.csproj", "{34AFC8A7-4BC0-4F96-BA49-1E5906FA0533}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,10 @@ Global
 		{3D9F954A-2A65-4BF2-B5CE-26AB3CA3F9DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D9F954A-2A65-4BF2-B5CE-26AB3CA3F9DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D9F954A-2A65-4BF2-B5CE-26AB3CA3F9DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34AFC8A7-4BC0-4F96-BA49-1E5906FA0533}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34AFC8A7-4BC0-4F96-BA49-1E5906FA0533}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34AFC8A7-4BC0-4F96-BA49-1E5906FA0533}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34AFC8A7-4BC0-4F96-BA49-1E5906FA0533}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -85,6 +91,7 @@ Global
 		{3D9F954A-2A65-4BF2-B5CE-26AB3CA3F9DE} = {1633089B-BF62-44E5-8B21-1049BE6C8184}
 		{6DBBF278-31BB-4BC8-8817-327A542C360D} = {8FD93E9F-750A-4B35-B229-7094520A17B7}
 		{1633089B-BF62-44E5-8B21-1049BE6C8184} = {8FD93E9F-750A-4B35-B229-7094520A17B7}
+		{34AFC8A7-4BC0-4F96-BA49-1E5906FA0533} = {6DBBF278-31BB-4BC8-8817-327A542C360D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7510C1D4-D6F0-4158-9897-0B8EE8B01461}

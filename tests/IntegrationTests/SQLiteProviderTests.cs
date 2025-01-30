@@ -4,7 +4,7 @@ using DbArchiver.Provider.SQLite.Config;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging.Abstractions;
 
-namespace DbArchiver.IntegrationTests;
+namespace DbArchiver.Provider.Integration.Tests;
 
 public class SQLiteProviderTests
 {
