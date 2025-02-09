@@ -45,40 +45,12 @@ namespace DbArchiver.Provider.MongoDB
 
         public async Task InsertAsync(ITargetSettings settings, IEnumerable<object> data)
         {
-            if (data == null || !data.Any())
-                return;
-
-            try
-            {
-                var targetSettings = ResolveTargetSettings(settings);
-                await InitializeAsync(targetSettings.ConnectionString, targetSettings.DatabaseName);
-                
-                var collection = _database.GetCollection<BsonDocument>(targetSettings.Collection);
-
-                var bsonDocuments = data.Select(d => new BsonDocument(((IDictionary<string, object>)d)));
-
-                foreach (var doc in bsonDocuments)
-                {
-                    var id = doc[targetSettings.IdColumn];
-                    var filter = Builders<BsonDocument>.Filter.Eq(targetSettings.IdColumn, id);
-                    var exists = await collection.Find(filter).AnyAsync();
-
-                    if (!exists)
-                    {
-                        await collection.InsertOneAsync(doc);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error inserting data.");
-                throw;
-            }
+            throw new NotImplementedException();
         }
 
         public Task ExecuteScriptAsync(ITargetSettings settings, string script)
         {
-            return Task.CompletedTask;
+            throw new NotImplementedException();
         }
 
         public async Task<IDatabaseProviderIterator> GetIteratorAsync(ISourceSettings settings, int transferQuantity)
